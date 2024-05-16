@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/camtrik/gin-blog/global"
+	"github.com/camtrik/gin-blog/internal/model"
 	"github.com/camtrik/gin-blog/internal/routers"
 	"github.com/camtrik/gin-blog/pkg/setting"
 	"github.com/gin-gonic/gin"
@@ -55,5 +56,14 @@ func setupSetting() error {
 	}
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
+	return nil
+}
+
+func setupDBEngine() error {
+	var err error
+	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
+	if err != nil {
+		return err
+	}
 	return nil
 }
