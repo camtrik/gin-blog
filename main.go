@@ -14,6 +14,7 @@ import (
 
 func init() {
 	err := setupSetting()
+	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
