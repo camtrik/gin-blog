@@ -8,15 +8,26 @@ import (
 	"github.com/camtrik/gin-blog/global"
 	"github.com/camtrik/gin-blog/internal/model"
 	"github.com/camtrik/gin-blog/internal/routers"
+	"github.com/camtrik/gin-blog/pkg/logger"
 	"github.com/camtrik/gin-blog/pkg/setting"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func init() {
 	err := setupSetting()
-	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
+	}
+
+	err = setupDBEngine()
+	if err != nil {
+		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+
+	err = setupLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
 	}
 }
 
@@ -24,6 +35,7 @@ func main() {
 	// log.Printf("global.ServerSetting: %+v\n", global.ServerSetting)
 	// log.Printf("global.AppSetting: %+v\n", global.AppSetting)
 	// log.Printf("global.DatabaseSetting: %+v\n", global.DatabaseSetting)
+	global.Logger.Infof("%s: wwww/%s", "ebbi", "gin-blog")
 
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
@@ -35,7 +47,10 @@ func main() {
 		WriteTimeout:   30 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	s.ListenAndServe()
+	err := s.ListenAndServe()
+	if err != nil {
+		log.Fatalf("s.ListenAndServe err: %v", err)
+	}
 }
 
 func setupSetting() error {
@@ -66,5 +81,15 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func setupLogger() error {
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:   600,
+		MaxAge:    10,
+		LocalTime: true,
+	}, "", log.LstdFlags).WithCaller(2)
 	return nil
 }
