@@ -16,7 +16,7 @@ func (t Tag) Get(c *gin.Context) {}
 // @Param state query int false "State" Enums(0, 1) default(1)
 // @Param page query int false "Page Number"
 // @Param page_size query int false "Page Size"
-// @Success 200 {object} model.Tag "success"
+// @Success 200 {object} model.TagSwagger "success"
 // @Failure 400 {object} errcode.Error "invalide params"
 // @Failure 500 {object} errcode.Error "inside error"
 // @Router /api/v1/tags [get]
@@ -27,7 +27,7 @@ func (t Tag) List(c *gin.Context) {}
 // @Param name body string true "Tag Name"
 // @Param created_by body string true "Created By"
 // @Param state body int false "State" Enums(0, 1) default(1)
-// @Success 200 {object} model.Tag "success"
+// @Success 200 {object} model.TagSwagger "success"
 // @Failure 400 {object} errcode.Error "invalide params"
 // @Failure 500 {object} errcode.Error "inside error"
 // @Router /api/v1/tags [post]

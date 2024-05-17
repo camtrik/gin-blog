@@ -1,4 +1,13 @@
 definitions:
+  app.Pager:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total_rows:
+        type: integer
+    type: object
   errcode.Error:
     type: object
   model.Tag:
@@ -21,6 +30,15 @@ definitions:
         type: string
       status:
         type: integer
+    type: object
+  model.TagSwagger:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Tag'
+        type: array
+      pager:
+        $ref: '#/definitions/app.Pager'
     type: object
 info:
   contact: {}
@@ -59,7 +77,7 @@ paths:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/model.Tag'
+            $ref: '#/definitions/model.TagSwagger'
         "400":
           description: invalide params
           schema:
@@ -98,7 +116,7 @@ paths:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/model.Tag'
+            $ref: '#/definitions/model.TagSwagger'
         "400":
           description: invalide params
           schema:
