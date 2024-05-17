@@ -1,0 +1,111 @@
+definitions:
+  errcode.Error:
+    type: object
+  model.Tag:
+    properties:
+      created_by:
+        type: string
+      created_on:
+        type: integer
+      deleted_on:
+        type: integer
+      id:
+        type: integer
+      is_del:
+        type: integer
+      modified_by:
+        type: string
+      modified_on:
+        type: integer
+      name:
+        type: string
+      status:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: A blog system backend framework based on Gin.
+  termsOfService: github.com/camtrik/gin-blog
+  title: gin-blog
+  version: "1.0"
+paths:
+  /api/v1/tags:
+    get:
+      parameters:
+      - description: Tag Name
+        in: query
+        maxLength: 100
+        name: name
+        type: string
+      - default: 1
+        description: State
+        enum:
+        - 0
+        - 1
+        in: query
+        name: state
+        type: integer
+      - description: Page Number
+        in: query
+        name: page
+        type: integer
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Get multiple tags
+    post:
+      parameters:
+      - description: Tag Name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: Created By
+        in: body
+        name: created_by
+        required: true
+        schema:
+          type: string
+      - default: 1
+        description: State
+        in: body
+        name: state
+        schema:
+          enum:
+          - 0
+          - 1
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Create a tag
+swagger: "2.0"

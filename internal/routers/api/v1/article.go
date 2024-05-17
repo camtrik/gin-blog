@@ -13,9 +13,10 @@ func NewArticle() Article {
 }
 
 func (a Article) Get(c *gin.Context) {
+	// test ERROR response
 	app.NewResponse(c).ToErrorResponse(errcode.ServerError)
-	return
 }
+
 func (a Article) List(c *gin.Context)   {}
 func (a Article) Create(c *gin.Context) {}
 func (a Article) Update(c *gin.Context) {}

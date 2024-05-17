@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/camtrik/gin-blog/global"
@@ -31,6 +32,10 @@ func init() {
 	}
 }
 
+// @title gin-blog
+// @version 1.0
+// @description A blog system backend framework based on Gin.
+// @termsOfService github.com/camtrik/gin-blog
 func main() {
 	// log.Printf("global.ServerSetting: %+v\n", global.ServerSetting)
 	// log.Printf("global.AppSetting: %+v\n", global.AppSetting)
@@ -41,7 +46,7 @@ func main() {
 	router := routers.NewRouter()
 
 	s := &http.Server{
-		Addr:           ":8080",
+		Addr:           ":" + strconv.Itoa(global.ServerSetting.HttpPort),
 		Handler:        router,
 		ReadTimeout:    30 * time.Second,
 		WriteTimeout:   30 * time.Second,
