@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// private field
+// private field, can only be accessed within the same package
 type Error struct {
 	code    int      `json:"code"`
 	msg     string   `json:"msg"`

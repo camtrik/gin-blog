@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/camtrik/gin-blog/global"
 	"github.com/camtrik/gin-blog/pkg/setting"
@@ -11,13 +12,13 @@ import (
 )
 
 type Model struct {
-	Id         int32  `gorm:"primary_key" json:"id"`
+	Id         uint32 `gorm:"primary_key" json:"id"`
 	CreatedBy  string `json:"created_by"`
-	CreatedOn  int32  `json:"created_on"`
-	DeletedOn  int32  `json:"deleted_on"`
-	IsDel      int8   `json:"is_del"`
+	CreatedOn  uint32 `json:"created_on"`
+	DeletedOn  uint32 `json:"deleted_on"`
+	IsDel      uint8  `json:"is_del"`
 	ModifiedBy string `json:"modified_by"`
-	ModifiedOn int32  `json:"modified_on"`
+	ModifiedOn uint32 `json:"modified_on"`
 }
 
 func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
@@ -55,8 +56,78 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 		return nil, err
 	}
 
+	// register callbacks
+	db.Callback().Create().Before("gorm:create").Register("update_time_stamp_for_create", updateTimeStampForCreateCallback)
+	db.Callback().Update().Before("gorm:update").Register("update_time_stamp_for_update", updateTimeStampForUpdateCallback)
+	db.Callback().Delete().Before("gorm:delete").Register("delete", deleteCallback)
+
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
 
 	return db, nil
+}
+
+// model callback
+// func updateTimeStampForCreateCallback(db *gorm.DB) {
+// 	if db.Error == nil {
+// 		nowTime := time.Now().Unix()
+
+// 		if createTimeField := db.Statement.Schema.LookUpField("CreatedOn"); createTimeField != nil {
+// 			value, _ := createTimeField.ValueOf(db.Statement.Context, db.Statement.ReflectValue)
+// 			if isZero(value) {
+// 				createTimeField.Set(db.Statement.Context, db.Statement.ReflectValue, nowTime)
+// 			}
+// 		}
+
+// 		if modifyTimeField := db.Statement.Schema.LookUpField("ModifiedOn"); modifyTimeField != nil {
+// 			value, _ := modifyTimeField.ValueOf(db.Statement.Context, db.Statement.ReflectValue)
+// 			if isZero(value) {
+// 				modifyTimeField.Set(db.Statement.Context, db.Statement.ReflectValue, nowTime)
+// 			}
+// 		}
+// 	}
+// }
+
+func updateTimeStampForCreateCallback(db *gorm.DB) {
+	if db.Error == nil {
+		nowTime := time.Now().Unix()
+
+		if createTimeField := db.Statement.Schema.LookUpField("CreatedOn"); createTimeField != nil {
+			value, _ := createTimeField.ValueOf(db.Statement.Context, db.Statement.ReflectValue)
+			if isZero(value) {
+				db.Statement.SetColumn("CreatedOn", nowTime)
+			}
+		}
+
+		if modifyTimeField := db.Statement.Schema.LookUpField("ModifiedOn"); modifyTimeField != nil {
+			value, _ := modifyTimeField.ValueOf(db.Statement.Context, db.Statement.ReflectValue)
+			if isZero(value) {
+				db.Statement.SetColumn("ModifiedOn", nowTime)
+			}
+		}
+	}
+}
+
+func updateTimeStampForUpdateCallback(db *gorm.DB) {
+	if db.Error == nil {
+		nowTime := time.Now().Unix()
+		db.Statement.SetColumn("ModifiedOn", nowTime)
+	}
+}
+
+func deleteCallback(db *gorm.DB) {
+	if db.Error == nil {
+		now := time.Now().Unix()
+		if db.Statement.Schema.LookUpField("DeletedOn") != nil {
+			db.Statement.SetColumn("DeletedOn", now)
+		}
+
+		if db.Statement.Schema.LookUpField("IsDel") != nil {
+			db.Statement.SetColumn("IsDel", 1)
+		}
+	}
+}
+
+func isZero(value interface{}) bool {
+	return value == nil || value == 0 || value == ""
 }
