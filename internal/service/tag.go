@@ -31,7 +31,7 @@ type UpdateTagRequest struct {
 }
 
 type DeleteTagRequest struct {
-	Id uint32 `form:"id" binding:"required,gte=1`
+	Id uint32 `form:"id" binding:"required,gte=1"`
 }
 
 func (svc *Service) CountTag(param *CountTagRequest) (int64, error) {
