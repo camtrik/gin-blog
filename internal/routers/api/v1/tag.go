@@ -1,6 +1,11 @@
 package v1
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/camtrik/gin-blog/global"
+	"github.com/camtrik/gin-blog/pkg/app"
+	"github.com/camtrik/gin-blog/pkg/errcode"
+	"github.com/gin-gonic/gin"
+)
 
 type Tag struct{}
 
@@ -20,7 +25,22 @@ func (t Tag) Get(c *gin.Context) {}
 // @Failure 400 {object} errcode.Error "invalide params"
 // @Failure 500 {object} errcode.Error "inside error"
 // @Router /api/v1/tags [get]
-func (t Tag) List(c *gin.Context) {}
+func (t Tag) List(c *gin.Context) {
+	param := struct {
+		Name  string `form:"name" binding:"max=100"`
+		State uint8  `form:"state,default=1" binding:"oneof=0 1"`
+	}{}
+	response := app.NewResponse(c)
+	valid, errs := app.BindAndValid(c, &param)
+	// parameters validation error
+	if !valid {
+		global.Logger.Errorf("app.BindAndValid errs: %v", errs)
+		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
+		return
+	}
+
+	response.ToResponse(gin.H{})
+}
 
 // @Summary Create a tag
 // @Produce json

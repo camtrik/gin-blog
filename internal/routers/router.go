@@ -2,6 +2,7 @@ package routers
 
 import (
 	_ "github.com/camtrik/gin-blog/docs"
+	"github.com/camtrik/gin-blog/internal/middleaware"
 	v1 "github.com/camtrik/gin-blog/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -12,7 +13,7 @@ func NewRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-
+	r.Use(middleaware.Translation())
 	// swagger blog
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
