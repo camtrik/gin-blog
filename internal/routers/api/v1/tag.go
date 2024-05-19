@@ -84,6 +84,16 @@ func (t Tag) Create(c *gin.Context) {
 	response.ToResponse(gin.H{})
 }
 
+// @Summary Update a tag
+// @Produce json
+// @Param id path int true "Tag ID"
+// @Param name body string false "Tag Name"
+// @Param state body int false "State" Enums(0, 1)
+// @Param modified_by body string true "Modified By"
+// @Success 200 {object} model.TagSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/tags/{id} [put]
 func (t Tag) Update(c *gin.Context) {
 	param := service.UpdateTagRequest{Id: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)
@@ -105,6 +115,13 @@ func (t Tag) Update(c *gin.Context) {
 	response.ToResponse(gin.H{})
 }
 
+// @Summary Delete a tag
+// @Produce json
+// @Param id path int true "Tag ID"
+// @Success 200 {object} model.TagSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/tags/{id} [delete]
 func (t Tag) Delete(c *gin.Context) {
 	param := service.DeleteTagRequest{Id: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)
