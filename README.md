@@ -1,4 +1,4 @@
-# Gin Blog System
+# Gin Blog System (Updating)
 
 5/19: tag management complete
 - create tag 
