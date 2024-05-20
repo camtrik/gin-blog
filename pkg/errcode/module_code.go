@@ -8,3 +8,12 @@ var (
 	ErrorCountTagFail   = NewError(20010005, "Failed to count tags")
 )
 
+var (
+	ErrorGetArticleFail       = NewError(20020001, "Failed to get article")
+	ErrorGetArticleListFail   = NewError(20020002, "Failed to get article list")
+	ErrorCreateArticleFail    = NewError(20020003, "Failed to create article")
+	ErrorUpdateArticleFail    = NewError(20020004, "Failed to update article")
+	ErrorDeleteArticleFail    = NewError(20020005, "Failed to delete article")
+	ErrorAddArticleTagFail    = NewError(20020006, "Failed to add article tag")
+	ErrorDeleteArticleTagFail = NewError(20020007, "Failed to delete article tag")
+)

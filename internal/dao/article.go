@@ -26,12 +26,12 @@ func (d *Dao) CountArticleByTag(tagId uint32, state uint8) (int64, error) {
 	return article.CountByTag(d.engine, tagId)
 }
 
-func (d *Dao) ListArticleByTag(tagId uint32, state uint8, page, pageSize int) ([]*model.Article, error) {
+func (d *Dao) ListArticleByTag(tagId uint32, state uint8, page, pageSize int) ([]*model.ArticleInfo, error) {
 	article := model.Article{State: state}
 	return article.ListByTag(d.engine, tagId, app.GetPageOffset(page, pageSize), pageSize)
 }
 
-func (d *Dao) CreateArticle(param *Article) (*model.Article, error) {
+func (d *Dao) CreateArticle(param *Article) error {
 	article := model.Article{
 		Title:   param.Title,
 		Desc:    param.Desc,
@@ -59,4 +59,9 @@ func (d *Dao) UpdateArticle(param *Article) error {
 		values["content"] = param.Content
 	}
 	return article.Update(d.engine, values)
+}
+
+func (d *Dao) DeleteArticle(id uint32) error {
+	article := model.Article{Model: &model.Model{Id: id}}
+	return article.Delete(d.engine)
 }

@@ -19,6 +19,15 @@ type ArticleSwagger struct {
 	Pager *app.Pager
 }
 
+type ArticleInfo struct {
+	Id      uint32 `json:"id"`
+	TagId   uint32 `json:"tag_id"`
+	TagName string `json:"tag_name"`
+	Title   string `json:"title"`
+	Desc    string `json:"desc"`
+	Content string `json:"content"`
+}
+
 func (a Article) TableName() string {
 	return "blog_article"
 }
@@ -26,8 +35,8 @@ func (a Article) TableName() string {
 func (a Article) CountByTag(db *gorm.DB, tagId uint32) (int64, error) {
 	var count int64
 	err := db.Table(ArticleTag{}.TableName()+" AS at").
-		Joins("LEFT JOIN"+a.TableName()+" AS a ON at.article_id = a.id").
-		Joins("LEFT JOIN"+Tag{}.TableName()+" AS t ON at.tag_id = t.id").
+		Joins("LEFT JOIN `"+a.TableName()+"` AS a ON at.article_id = a.id").
+		Joins("LEFT JOIN `"+Tag{}.TableName()+"` AS t ON at.tag_id = t.id").
 		Where("at.tag_id = ? AND a.state = ? AND a.is_del = ?", tagId, a.State, 0).
 		Count(&count).Error
 	if err != nil {
@@ -37,21 +46,22 @@ func (a Article) CountByTag(db *gorm.DB, tagId uint32) (int64, error) {
 }
 
 // TODO: Implement ArticleRow to include the tag information
-func (a Article) ListByTag(db *gorm.DB, tagId uint32, pageOffset, pageSize int) ([]*Article, error) {
-	var articles []*Article
+func (a Article) ListByTag(db *gorm.DB, tagId uint32, pageOffset, pageSize int) ([]*ArticleInfo, error) {
+	var articlesInfo []*ArticleInfo
 	var err error
 	if pageOffset >= 0 && pageSize > 0 {
 		db = db.Offset(pageOffset).Limit(pageSize)
 	}
 	err = db.Table(ArticleTag{}.TableName()+" AS at").
-		Joins("LEFT JOIN"+a.TableName()+" AS a ON at.article_id = a.id").
-		Joins("LEFT JOIN"+Tag{}.TableName()+" AS t ON at.tag_id = t.id").
+		Select("a.id as id, at.tag_id as tag_id, t.name AS tag_name, a.title as title, a.`desc` as `desc`, a.content as content").
+		Joins("LEFT JOIN `"+a.TableName()+"` AS a ON at.article_id = a.id").
+		Joins("LEFT JOIN `"+Tag{}.TableName()+"` AS t ON at.tag_id = t.id").
 		Where("at.tag_id = ? AND a.state = ? AND a.is_del = ?", tagId, a.State, 0).
-		Find(&articles).Error
+		Find(&articlesInfo).Error
 	if err != nil {
 		return nil, err
 	}
-	return articles, nil
+	return articlesInfo, nil
 }
 
 func (a Article) Count(db *gorm.DB) (int64, error) {
@@ -93,13 +103,8 @@ func (a Article) Get(db *gorm.DB) (Article, error) {
 	return article, nil
 }
 
-func (a Article) Create(db *gorm.DB) (*Article, error) {
-	err := db.Create(&a).Error
-	if err != nil {
-		return nil, err
-	}
-	// will use it to create related tags in service layer
-	return &a, nil
+func (a Article) Create(db *gorm.DB) error {
+	return db.Create(&a).Error
 }
 
 func (a Article) Update(db *gorm.DB, values interface{}) error {

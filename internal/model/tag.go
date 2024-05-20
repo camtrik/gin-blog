@@ -20,6 +20,15 @@ func (t Tag) TableName() string {
 	return "blog_tag"
 }
 
+func (t Tag) Get(db *gorm.DB) (Tag, error) {
+	var tag Tag
+	err := db.Model(&Tag{}).Where("id = ? AND is_del = ?", t.Id, 0).First(&tag).Error
+	if err != nil {
+		return tag, err
+	}
+	return tag, nil
+}
+
 // count the number of tags with the given name and state, which are not deleted
 func (t Tag) Count(db *gorm.DB) (int64, error) {
 	var count int64
