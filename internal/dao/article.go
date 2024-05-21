@@ -6,14 +6,15 @@ import (
 )
 
 type Article struct {
-	Id         uint32 `json:"id"`
-	TagId      uint32 `json:"tag_id"`
-	Title      string `json:"title"`
-	Desc       string `json:"desc"`
-	Content    string `json:"content"`
-	State      uint8  `json:"state"`
-	CreatedBy  string `json:"created_by"`
-	ModifiedBy string `json:"modified_by"`
+	Id            uint32 `json:"id"`
+	TagId         uint32 `json:"tag_id"`
+	Title         string `json:"title"`
+	Desc          string `json:"desc"`
+	Content       string `json:"content"`
+	CoverImageUrl string `json:"cover_image_url"`
+	State         uint8  `json:"state"`
+	CreatedBy     string `json:"created_by"`
+	ModifiedBy    string `json:"modified_by"`
 }
 
 func (d *Dao) GetArticle(id uint32, state uint8) (model.Article, error) {
@@ -33,11 +34,12 @@ func (d *Dao) ListArticleByTag(tagId uint32, state uint8, page, pageSize int) ([
 
 func (d *Dao) CreateArticle(param *Article) error {
 	article := model.Article{
-		Title:   param.Title,
-		Desc:    param.Desc,
-		Content: param.Content,
-		State:   param.State,
-		Model:   &model.Model{CreatedBy: param.CreatedBy},
+		Title:         param.Title,
+		Desc:          param.Desc,
+		Content:       param.Content,
+		CoverImageUrl: param.CoverImageUrl,
+		State:         param.State,
+		Model:         &model.Model{CreatedBy: param.CreatedBy},
 	}
 	return article.Create(d.engine)
 }
@@ -57,6 +59,9 @@ func (d *Dao) UpdateArticle(param *Article) error {
 	}
 	if param.Content != "" {
 		values["content"] = param.Content
+	}
+	if param.CoverImageUrl != "" {
+		values["cover_image_url"] = param.CoverImageUrl
 	}
 	return article.Update(d.engine, values)
 }

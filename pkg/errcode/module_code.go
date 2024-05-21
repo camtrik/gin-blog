@@ -16,4 +16,6 @@ var (
 	ErrorDeleteArticleFail    = NewError(20020005, "Failed to delete article")
 	ErrorAddArticleTagFail    = NewError(20020006, "Failed to add article tag")
 	ErrorDeleteArticleTagFail = NewError(20020007, "Failed to delete article tag")
+
+	ErrorUploadFileFail = NewError(20030001, "Failed to upload file")
 )

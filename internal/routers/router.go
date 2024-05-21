@@ -1,8 +1,12 @@
 package routers
 
 import (
+	"net/http"
+
 	_ "github.com/camtrik/gin-blog/docs"
+	"github.com/camtrik/gin-blog/global"
 	"github.com/camtrik/gin-blog/internal/middleaware"
+	"github.com/camtrik/gin-blog/internal/routers/api"
 	v1 "github.com/camtrik/gin-blog/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,6 +24,9 @@ func NewRouter() *gin.Engine {
 	article := v1.NewArticle()
 	tag := v1.NewTag()
 
+	upload := api.NewUpload()
+	r.POST("/upload/file", upload.UploadFile)
+	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 	apiv1 := r.Group("/api/v1")
 	{
 		apiv1.GET("/tags", tag.List)
