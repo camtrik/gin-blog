@@ -9,7 +9,7 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 
 
 ## TODO List
-- [ ] Upload image and files
+- [x] Upload image and files
 - [ ] API Access Control: Implement authentication to secure the API endpoints.
 - [ ] Middleware Implementation: Integrate common middleware for enhanced logging and error handling.
 - [ ] Distributed Tracing
@@ -72,4 +72,8 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
     curl -X DELETE http://127.0.0.1:8000/api/v1/articles/:id
     ```
 
+### Update Image
 
+```bash 
+curl -X POST http://127.0.0.1:8000/upload/file -F file=@{file_path} -F type=1
+```
