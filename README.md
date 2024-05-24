@@ -10,12 +10,12 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 
 ## TODO List
 - [x] Upload image and files
-- [ ] API Access Control: Implement authentication to secure the API endpoints.
+- [x] API Access Control: Implement authentication to secure the API endpoints.
 - [ ] Middleware Implementation: Integrate common middleware for enhanced logging and error handling.
 - [ ] Distributed Tracing
 
 
-### Validation
+### JWT Authorization
 Use JWT for API access control
 
 Generate a token
@@ -25,6 +25,15 @@ curl -X POST \
   -d 'app_key=ebbi' \
   -d 'app_secret=gin-blog'
 ```
+
+To access protected API endpoints, include the generated JWT token in the request header.
+
+Use the `token` header to include the token: 
+```bash
+curl -X GET http://127.0.0.1:8000/api/v1/tags -H 'token: generated_token_here'
+```
+
+Replace `generated_token_here` with the actual token received from the authentication endpoint.
 
 ### Tag Management
 1. **Create Tag**

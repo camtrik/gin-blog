@@ -10,7 +10,7 @@ import (
 
 type Claims struct {
 	AppKey    string `json:"app_key"`
-	AppSecret string `json:"app_secret`
+	AppSecret string `json:"app_secret"`
 	jwt.StandardClaims
 }
 

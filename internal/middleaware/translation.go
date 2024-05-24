@@ -23,13 +23,10 @@ func Translation() gin.HandlerFunc {
 			switch locale {
 			case "zh":
 				_ = zh_translations.RegisterDefaultTranslations(v, trans)
-				break
 			case "ja":
 				_ = ja_translations.RegisterDefaultTranslations(v, trans)
-				break
 			default:
 				_ = en_translations.RegisterDefaultTranslations(v, trans)
-				break
 			}
 			c.Set("trans", trans)
 		}
