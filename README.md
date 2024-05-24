@@ -15,6 +15,17 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 - [ ] Distributed Tracing
 
 
+### Validation
+Use JWT for API access control
+
+Generate a token
+```bash
+curl -X POST \
+  'http://127.0.0.1:8000/auth' \
+  -d 'app_key=ebbi' \
+  -d 'app_secret=gin-blog'
+```
+
 ### Tag Management
 1. **Create Tag**
     ```bash
