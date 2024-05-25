@@ -40,6 +40,16 @@ type JWTSettingS struct {
 	Expire time.Duration
 }
 
+type EmailSettingS struct {
+	Host     string
+	Port     int
+	IsSSL    bool
+	UserName string
+	Password string
+	From     string
+	To       []string
+}
+
 func (s *Setting) ReadSection(k string, v interface{}) error {
 	err := s.vp.UnmarshalKey(k, v)
 	if err != nil {

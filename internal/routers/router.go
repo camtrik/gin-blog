@@ -15,8 +15,14 @@ import (
 
 func NewRouter() *gin.Engine {
 	r := gin.Default()
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	if global.ServerSetting.RunMode == "debug" {
+		r.Use(gin.Logger())
+		r.Use(gin.Recovery())
+	} else {
+		r.Use(middleaware.AccessLog())
+		r.Use(middleaware.Recovery())
+	}
+
 	r.Use(middleaware.Translation())
 	// swagger blog
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -29,6 +35,10 @@ func NewRouter() *gin.Engine {
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 
 	r.POST("/auth", api.GetAuth)
+
+	r.GET("/panic", func(c *gin.Context) {
+		panic("test panic")
+	})
 
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(middleaware.JWT())

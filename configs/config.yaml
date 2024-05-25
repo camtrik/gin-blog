@@ -31,3 +31,12 @@ JWT:
   Secret: ebbi
   Issuer: gin-blog
   Expire: 7200
+Email:
+  Host: smtp.gmail.com
+  Port: 465
+  UserName: xxx
+  Password: xxx
+  IsSSL: true 
+  From: xxx
+  To:
+    - xxx
