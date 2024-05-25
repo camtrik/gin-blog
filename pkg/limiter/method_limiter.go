@@ -11,11 +11,11 @@ type MethodLimiter struct {
 	*Limiter
 }
 
-// func NewMethodLimiter() LimiterIface {
-// 	return MethodLimiter{
-// 		Limiter: &Limiter{limiterBuckets: make(map[string]*ratelimit.Bucket)},
-// 	}
-// }
+func NewMethodLimiter() LimiterIface {
+	return MethodLimiter{
+		Limiter: &Limiter{limiterBuckets: make(map[string]*ratelimit.Bucket)},
+	}
+}
 
 // e.g. api/v1/resource?id=123&name=abc return api/v1/resource
 func (l MethodLimiter) Key(c *gin.Context) string {

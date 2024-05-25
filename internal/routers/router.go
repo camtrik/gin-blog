@@ -1,17 +1,28 @@
 package routers
 
 import (
+	"log"
 	"net/http"
+	"time"
 
 	_ "github.com/camtrik/gin-blog/docs"
 	"github.com/camtrik/gin-blog/global"
 	"github.com/camtrik/gin-blog/internal/middleaware"
 	"github.com/camtrik/gin-blog/internal/routers/api"
 	v1 "github.com/camtrik/gin-blog/internal/routers/api/v1"
+	"github.com/camtrik/gin-blog/pkg/limiter"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"golang.org/x/net/context/ctxhttp"
 )
+
+var methodLimiter = limiter.NewMethodLimiter().AddBuckets(limiter.LimiterBucketRule{
+	Key:          "/auth",
+	FillInterval: time.Second,
+	Capacity:     10,
+	Quantum:      10,
+})
 
 func NewRouter() *gin.Engine {
 	r := gin.Default()
@@ -23,6 +34,9 @@ func NewRouter() *gin.Engine {
 		r.Use(middleaware.Recovery())
 	}
 
+	r.Use(middleaware.RateLimiter(methodLimiter))
+	r.Use(middleaware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
+	// r.Use(middleaware.ContextTimeout(time.Second * 3))
 	r.Use(middleaware.Translation())
 	// swagger blog
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -36,8 +50,20 @@ func NewRouter() *gin.Engine {
 
 	r.POST("/auth", api.GetAuth)
 
+	// test panic
 	r.GET("/panic", func(c *gin.Context) {
 		panic("test panic")
+	})
+
+	// test timeout
+	r.GET("/timeout", func(c *gin.Context) {
+		_, err := ctxhttp.Get(c.Request.Context(), http.DefaultClient, "https://httpbin.org/delay/10")
+		if err != nil {
+			log.Printf("ctxhttp.Get err: %v", err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.String(http.StatusOK, "Request successful")
 	})
 
 	apiv1 := r.Group("/api/v1")
