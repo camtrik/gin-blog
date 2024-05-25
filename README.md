@@ -11,7 +11,8 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 ## TODO List
 - [x] Upload image and files
 - [x] API Access Control: Implement authentication to secure the API endpoints.
-- [ ] Middleware Implementation: Integrate common middleware for enhanced logging and error handling.
+- [x] Integrate common middleware for enhanced logging and error handling.
+- [ ] Middleaware ratelimiter ([url](https://github.com/juju/ratelimit)).
 - [ ] Distributed Tracing
 
 
