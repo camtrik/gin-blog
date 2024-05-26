@@ -6,6 +6,10 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 ## Features Completed
 - Article release and modification
 - Article tags
+- Upload images
+- API Access Control
+- Opentracing by jaeger 
+- API Ratelimiter
 
 
 ## TODO List
@@ -13,7 +17,8 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 - [x] API Access Control: Implement authentication to secure the API endpoints.
 - [x] Integrate common middleware for enhanced logging and error handling.
 - [x] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleaware.
-- [ ] Distributed Tracing
+- [x] Opentracing by jaeger (logger)
+- [ ] Opentracing SQL?
 - [ ] Restarts without interrupting connections
 
 
