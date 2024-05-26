@@ -34,7 +34,8 @@ func AccessLog() gin.HandlerFunc {
 			"request":  c.Request.PostForm.Encode(), // request data after encoding
 			"response": bodyWriter.body.String(),    // response data
 		}
-		global.Logger.WithFields(fields).Infof("access log: method: %s, status_code: %d, begin_time: %d, end_time: %d",
+
+		global.Logger.WithFields(fields).Infof(c, "access log: method: %s, status_code: %d, begin_time: %d, end_time: %d",
 			c.Request.Method, bodyWriter.Status(), beginTime, endTime,
 		)
 	}

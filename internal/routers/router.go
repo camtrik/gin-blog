@@ -36,6 +36,7 @@ func NewRouter() *gin.Engine {
 
 	r.Use(middleaware.RateLimiter(methodLimiter))
 	r.Use(middleaware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
+	r.Use(middleaware.Tracing())
 	// r.Use(middleaware.ContextTimeout(time.Second * 3))
 	r.Use(middleaware.Translation())
 	// swagger blog

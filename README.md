@@ -12,8 +12,9 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 - [x] Upload image and files
 - [x] API Access Control: Implement authentication to secure the API endpoints.
 - [x] Integrate common middleware for enhanced logging and error handling.
-- [ ] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleaware.
+- [x] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleaware.
 - [ ] Distributed Tracing
+- [ ] Restarts without interrupting connections
 
 
 ### JWT Authorization

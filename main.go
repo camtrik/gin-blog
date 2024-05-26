@@ -11,6 +11,7 @@ import (
 	"github.com/camtrik/gin-blog/internal/routers"
 	"github.com/camtrik/gin-blog/pkg/logger"
 	"github.com/camtrik/gin-blog/pkg/setting"
+	"github.com/camtrik/gin-blog/pkg/tracer"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -30,6 +31,11 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupLogger err: %v", err)
 	}
+
+	err = setupTracer()
+	if err != nil {
+		log.Fatalf("init.setupTracer err: %v", err)
+	}
 }
 
 // @title gin-blog
@@ -40,7 +46,7 @@ func main() {
 	// log.Printf("global.ServerSetting: %+v\n", global.ServerSetting)
 	// log.Printf("global.AppSetting: %+v\n", global.AppSetting)
 	// log.Printf("global.DatabaseSetting: %+v\n", global.DatabaseSetting)
-	global.Logger.Infof("%s: wwww/%s", "ebbi", "gin-blog")
+	// global.Logger.Infof(c, "%s: www/%s", "ebbi", "gin-blog")
 
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
@@ -107,5 +113,17 @@ func setupLogger() error {
 		MaxAge:    10,
 		LocalTime: true,
 	}, "", log.LstdFlags).WithCaller(2)
+	return nil
+}
+
+func setupTracer() error {
+	jaegerTracer, _, err := tracer.NewJaegerTracer(
+		"gin-blog",
+		"localhost:6831",
+	)
+	if err != nil {
+		return err
+	}
+	global.Tracer = jaegerTracer
 	return nil
 }

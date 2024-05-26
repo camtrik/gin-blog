@@ -67,27 +67,6 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	return db, nil
 }
 
-// model callback
-// func updateTimeStampForCreateCallback(db *gorm.DB) {
-// 	if db.Error == nil {
-// 		nowTime := time.Now().Unix()
-
-// 		if createTimeField := db.Statement.Schema.LookUpField("CreatedOn"); createTimeField != nil {
-// 			value, _ := createTimeField.ValueOf(db.Statement.Context, db.Statement.ReflectValue)
-// 			if isZero(value) {
-// 				createTimeField.Set(db.Statement.Context, db.Statement.ReflectValue, nowTime)
-// 			}
-// 		}
-
-// 		if modifyTimeField := db.Statement.Schema.LookUpField("ModifiedOn"); modifyTimeField != nil {
-// 			value, _ := modifyTimeField.ValueOf(db.Statement.Context, db.Statement.ReflectValue)
-// 			if isZero(value) {
-// 				modifyTimeField.Set(db.Statement.Context, db.Statement.ReflectValue, nowTime)
-// 			}
-// 		}
-// 	}
-// }
-
 func updateTimeStampForCreateCallback(db *gorm.DB) {
 	if db.Error == nil {
 		nowTime := time.Now().Unix()
