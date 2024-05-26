@@ -1,4 +1,4 @@
-package errcode 
+package errcode
 
 var (
 	Success                   = NewError(0, "Success")
@@ -9,5 +9,6 @@ var (
 	UnauthorizedTokenError    = NewError(10000004, "Authentication Failed: Invalid Token")
 	UnauthorizedTokenTimeout  = NewError(10000005, "Authentication Failed: Token Timeout")
 	UnauthorizedTokenGenerate = NewError(10000006, "Authentication Failed: Token Generation Failed")
-	TooManyRequests           = NewError(10000007, "Too Many Requests")
+	NeedToken                 = NewError(10000007, "Authentication Failed: Token Required. Please generate a token first.")
+	TooManyRequests           = NewError(10000008, "Too Many Requests")
 )

@@ -1,6 +1,7 @@
 package middleaware
 
 import (
+	"github.com/camtrik/gin-blog/global"
 	"github.com/camtrik/gin-blog/pkg/app"
 	"github.com/camtrik/gin-blog/pkg/errcode"
 	"github.com/dgrijalva/jwt-go"
@@ -19,7 +20,8 @@ func JWT() gin.HandlerFunc {
 			token = c.GetHeader("token")
 		}
 		if token == "" {
-			ecode = errcode.InvalidParams
+			global.Logger.Errorf(c, "token is empty")
+			ecode = errcode.NeedToken
 		} else {
 			_, err := app.ParseToken(token)
 			if err != nil {
@@ -37,6 +39,9 @@ func JWT() gin.HandlerFunc {
 			response.ToErrorResponse(ecode)
 			c.Abort()
 			return
+
 		}
+
+		c.Next()
 	}
 }
