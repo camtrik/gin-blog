@@ -1,9 +1,11 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/camtrik/gin-blog/global"
@@ -16,8 +18,18 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+var (
+	port    string
+	runMode string
+	config  string
+)
+
 func init() {
-	err := setupSetting()
+	err := setupFlag()
+	if err != nil {
+		log.Fatalf("init.setupFlag err: %v", err)
+	}
+	err = setupSetting()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
@@ -65,7 +77,8 @@ func main() {
 }
 
 func setupSetting() error {
-	setting, err := setting.NewSetting()
+	// "," to split multiple config files
+	setting, err := setting.NewSetting(strings.Split(config, ",")...)
 	if err != nil {
 		return err
 	}
@@ -89,6 +102,13 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+	if port != "" {
+		global.ServerSetting.HttpPort, _ = strconv.Atoi(port)
+	}
+	if runMode != "" {
+		global.ServerSetting.RunMode = runMode
+	}
+
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
 
@@ -125,5 +145,14 @@ func setupTracer() error {
 		return err
 	}
 	global.Tracer = jaegerTracer
+	return nil
+}
+
+func setupFlag() error {
+	flag.StringVar(&port, "port", "", "server port")
+	flag.StringVar(&runMode, "mode", "", "run mode")
+	flag.StringVar(&config, "config", "configs/", "config path")
+	flag.Parse()
+
 	return nil
 }
