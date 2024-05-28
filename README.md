@@ -19,7 +19,7 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 - [x] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleaware.
 - [x] Opentracing by jaeger (logger)
 - [ ] Opentracing SQL?
-- [ ] Restarts without interrupting connections
+- [x] Graceful shutdown
 - [x] Hot reload configs
 
 
