@@ -20,6 +20,7 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 - [x] Opentracing by jaeger (logger)
 - [ ] Opentracing SQL?
 - [ ] Restarts without interrupting connections
+- [x] Hot reload configs
 
 
 ### JWT Authorization

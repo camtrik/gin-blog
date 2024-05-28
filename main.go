@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -22,6 +23,11 @@ var (
 	port    string
 	runMode string
 	config  string
+
+	isVersion    bool
+	buildTime    string
+	buildVersion string
+	gitCommitId  string
 )
 
 func init() {
@@ -59,7 +65,12 @@ func main() {
 	// log.Printf("global.AppSetting: %+v\n", global.AppSetting)
 	// log.Printf("global.DatabaseSetting: %+v\n", global.DatabaseSetting)
 	// global.Logger.Infof(c, "%s: www/%s", "ebbi", "gin-blog")
-
+	if isVersion {
+		fmt.Printf("build time: %s\n", buildTime)
+		fmt.Printf("build version: %s\n", buildVersion)
+		fmt.Printf("git commit id: %s\n", gitCommitId)
+		return
+	}
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
 
@@ -151,7 +162,8 @@ func setupTracer() error {
 func setupFlag() error {
 	flag.StringVar(&port, "port", "", "server port")
 	flag.StringVar(&runMode, "mode", "", "run mode")
-	flag.StringVar(&config, "config", "configs/", "config path")
+	flag.StringVar(&config, "config", "./configs/", "config path")
+	flag.BoolVar(&isVersion, "version", false, "show compile info")
 	flag.Parse()
 
 	return nil
