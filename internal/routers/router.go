@@ -50,6 +50,7 @@ func NewRouter() *gin.Engine {
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 
 	r.POST("/auth", api.GetAuth)
+	r.GET("/auth", api.GetAuth)
 
 	// test panic
 	r.GET("/panic", func(c *gin.Context) {
