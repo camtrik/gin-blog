@@ -10,6 +10,42 @@ definitions:
     type: object
   errcode.Error:
     type: object
+  model.Article:
+    properties:
+      content:
+        type: string
+      cover_image_url:
+        type: string
+      created_by:
+        type: string
+      created_on:
+        type: integer
+      deleted_on:
+        type: integer
+      desc:
+        type: string
+      id:
+        type: integer
+      is_del:
+        type: integer
+      modified_by:
+        type: string
+      modified_on:
+        type: integer
+      state:
+        type: integer
+      title:
+        type: string
+    type: object
+  model.ArticleSwagger:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Article'
+        type: array
+      pager:
+        $ref: '#/definitions/app.Pager'
+    type: object
   model.Tag:
     properties:
       created_by:
@@ -28,7 +64,7 @@ definitions:
         type: integer
       name:
         type: string
-      status:
+      state:
         type: integer
     type: object
   model.TagSwagger:
@@ -43,10 +79,278 @@ definitions:
 info:
   contact: {}
   description: A blog system backend framework based on Gin.
-  termsOfService: github.com/camtrik/gin-blog
+  termsOfService: https://github.com/camtrik/gin-blog
   title: gin-blog
   version: "1.0"
 paths:
+  /api/v1/articles:
+    get:
+      parameters:
+      - description: Tag ID
+        in: query
+        name: tag_id
+        type: integer
+      - description: Title
+        in: query
+        name: title
+        type: string
+      - description: State
+        enum:
+        - 0
+        - 1
+        in: query
+        name: state
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Get a list of articles
+    post:
+      parameters:
+      - description: Title
+        in: body
+        name: title
+        required: true
+        schema:
+          type: string
+      - description: Desc
+        in: body
+        name: desc
+        required: true
+        schema:
+          type: string
+      - description: Content
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: Cover Image URL
+        in: body
+        name: cover_image_url
+        required: true
+        schema:
+          type: string
+      - default: 1
+        description: State
+        in: body
+        name: state
+        schema:
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: Created By
+        in: body
+        name: created_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Create an article
+  /api/v1/articles/{article_id}/tags:
+    delete:
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tag ID
+        in: body
+        name: tag_id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Delete a tag from an article
+    post:
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tag ID
+        in: body
+        name: tag_id
+        required: true
+        schema:
+          type: integer
+      - description: Created By
+        in: body
+        name: created_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Add a tag to an article
+  /api/v1/articles/{id}:
+    delete:
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Delete an article
+    get:
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Get an article by id
+    put:
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Title
+        in: body
+        name: title
+        schema:
+          type: string
+      - description: Desc
+        in: body
+        name: desc
+        schema:
+          type: string
+      - description: Content
+        in: body
+        name: content
+        schema:
+          type: string
+      - description: Cover Image URL
+        in: body
+        name: cover_image_url
+        schema:
+          type: string
+      - description: State
+        in: body
+        name: state
+        schema:
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: Modified By
+        in: body
+        name: modified_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.ArticleSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Update an article
   /api/v1/tags:
     get:
       parameters:
@@ -126,4 +430,70 @@ paths:
           schema:
             $ref: '#/definitions/errcode.Error'
       summary: Create a tag
+  /api/v1/tags/{id}:
+    delete:
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.TagSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Delete a tag
+    put:
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tag Name
+        in: body
+        name: name
+        schema:
+          type: string
+      - description: State
+        in: body
+        name: state
+        schema:
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: Modified By
+        in: body
+        name: modified_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/model.TagSwagger'
+        "400":
+          description: invalide params
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: inside error
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: Update a tag
 swagger: "2.0"

@@ -15,6 +15,13 @@ func NewArticle() Article {
 	return Article{}
 }
 
+// @Summary Get an article by id
+// @Produce json
+// @Param id path int true "Article ID"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles/{id} [get]
 func (a Article) Get(c *gin.Context) {
 	param := service.GetArticleRequest{Id: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)
@@ -36,6 +43,17 @@ func (a Article) Get(c *gin.Context) {
 	response.ToResponse(article)
 }
 
+// @Summary Get a list of articles
+// @Produce json
+// @Param tag_id query int false "Tag ID"
+// @Param title query string false "Title"
+// @Param state query int false "State" Enums(0, 1)
+// @Param page query int false "Page"
+// @Param page_size query int false "Page Size"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles [get]
 func (a Article) List(c *gin.Context) {
 	param := service.ArticleListRequest{}
 	response := app.NewResponse(c)
@@ -58,6 +76,18 @@ func (a Article) List(c *gin.Context) {
 	response.ToResponseList(articlesWithTag, articleCount)
 }
 
+// @Summary Create an article
+// @Produce json
+// @Param title body string true "Title"
+// @Param desc body string true "Desc"
+// @Param content body string true "Content"
+// @Param cover_image_url body string true "Cover Image URL"
+// @Param state body int false "State" Enums(0, 1) default(1)
+// @Param created_by body string true "Created By"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles [post]
 func (a Article) Create(c *gin.Context) {
 	param := service.CreateArticleRequest{}
 	response := app.NewResponse(c)
@@ -78,6 +108,20 @@ func (a Article) Create(c *gin.Context) {
 
 	response.ToResponse(gin.H{})
 }
+
+// @Summary Update an article
+// @Produce json
+// @Param id path int true "Article ID"
+// @Param title body string false "Title"
+// @Param desc body string false "Desc"
+// @Param content body string false "Content"
+// @Param cover_image_url body string false "Cover Image URL"
+// @Param state body int false "State" Enums(0, 1)
+// @Param modified_by body string true "Modified By"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles/{id} [put]
 func (a Article) Update(c *gin.Context) {
 	param := service.UpdateArticleRequest{Id: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)
@@ -99,6 +143,13 @@ func (a Article) Update(c *gin.Context) {
 	response.ToResponse(gin.H{})
 }
 
+// @Summary Delete an article
+// @Produce json
+// @Param id path int true "Article ID"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles/{id} [delete]
 func (a Article) Delete(c *gin.Context) {
 	param := service.DeleteArticleRequest{Id: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)
@@ -120,6 +171,15 @@ func (a Article) Delete(c *gin.Context) {
 	response.ToResponse(gin.H{})
 }
 
+// @Summary Add a tag to an article
+// @Produce json
+// @Param id path int true "Article ID"
+// @Param tag_id body int true "Tag ID"
+// @Param created_by body string true "Created By"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles/{article_id}/tags [post]
 func (a Article) AddTag(c *gin.Context) {
 	param := service.AddArticleTagRequest{ArticleId: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)
@@ -141,6 +201,14 @@ func (a Article) AddTag(c *gin.Context) {
 	response.ToResponse(gin.H{})
 }
 
+// @Summary Delete a tag from an article
+// @Produce json
+// @Param id path int true "Article ID"
+// @Param tag_id body int true "Tag ID"
+// @Success 200 {object} model.ArticleSwagger "success"
+// @Failure 400 {object} errcode.Error "invalide params"
+// @Failure 500 {object} errcode.Error "inside error"
+// @Router /api/v1/articles/{article_id}/tags [delete]
 func (a Article) DeleteTag(c *gin.Context) {
 	param := service.DeleteArticleTagRequest{ArticleId: convert.StrTo(c.Param("id")).MustUInt32()}
 	response := app.NewResponse(c)

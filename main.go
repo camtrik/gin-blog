@@ -63,7 +63,7 @@ func init() {
 // @title gin-blog
 // @version 1.0
 // @description A blog system backend framework based on Gin.
-// @termsOfService github.com/camtrik/gin-blog
+// @termsOfService https://github.com/camtrik/gin-blog
 func main() {
 	// log.Printf("global.ServerSetting: %+v\n", global.ServerSetting)
 	// log.Printf("global.AppSetting: %+v\n", global.AppSetting)
