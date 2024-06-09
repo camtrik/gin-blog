@@ -14,18 +14,19 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 
 ## Features Completed
 - Article release and modification
-- Article tags
+- Article tags management
 - Upload images
-- API Access Control
-- Opentracing by jaeger 
-- API Ratelimiter ([url](https://github.com/juju/ratelimit))
+- API Access Control by [JWT](https://github.com/dgrijalva/jwt-go)
+- Opentracing by [Jaeger](http://github.com/uber/jaeger-client-go) 
+- API [ratelimiter](https://github.com/juju/ratelimit)
+- Hot reload
 
 
 ## TODO List
 - [x] Upload image and files
 - [x] API Access Control by [JWT](https://github.com/dgrijalva/jwt-go)
 - [x] Integrate common middleware for enhanced logging and error handling.
-- [x] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleware.
+- [x] [Ratelimiter](https://github.com/juju/ratelimit) & time out controller in middleware.
 - [x] Opentracing by [Jaeger](http://github.com/uber/jaeger-client-go)
 - [ ] Opentracing SQL?
 - [x] Graceful shutdown
@@ -115,8 +116,6 @@ Replace `generated_token_here` with the actual token received from the authentic
 curl -X POST http://127.0.0.1:8000/upload/file -F file=@{file_path} -F type=1
 ```
 
-
-
 ## 日本語
 
 ## 概要
@@ -128,15 +127,14 @@ curl -X POST http://127.0.0.1:8000/upload/file -F file=@{file_path} -F type=1
 - 画像アップロード
 - [JWT](https://github.com/dgrijalva/jwt-go)によるAPIアクセス制御
 - [Jaeger](https://github.com/uber/jaeger-client-go)によるオープントレーシング
-- API レートリミッター ([url](https://github.com/juju/ratelimit))
-- 正常なシャットダウン
+- API [レートリミッター](https://github.com/juju/ratelimit)
 - ホットリロード
 
 ## TODO リスト
 - [x] Upload image and files
 - [x] API Access Control: Implement authentication to secure the API endpoints.
 - [x] Integrate common middleware for enhanced logging and error handling.
-- [x] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleware.
+- [x] [Ratelimiter](https://github.com/juju/ratelimit) & time out controller in middleware.
 - [x] Opentracing by jaeger (logger)
 - [ ] Opentracing SQL?
 - [x] Graceful shutdown
