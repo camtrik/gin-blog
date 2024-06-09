@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/camtrik/gin-blog/docs"
 	"github.com/camtrik/gin-blog/global"
-	"github.com/camtrik/gin-blog/internal/middleaware"
+	"github.com/camtrik/gin-blog/internal/middleware"
 	"github.com/camtrik/gin-blog/internal/routers/api"
 	v1 "github.com/camtrik/gin-blog/internal/routers/api/v1"
 	"github.com/camtrik/gin-blog/pkg/limiter"
@@ -30,15 +30,15 @@ func NewRouter() *gin.Engine {
 		r.Use(gin.Logger())
 		r.Use(gin.Recovery())
 	} else {
-		r.Use(middleaware.AccessLog())
-		r.Use(middleaware.Recovery())
+		r.Use(middleware.AccessLog())
+		r.Use(middleware.Recovery())
 	}
 
-	r.Use(middleaware.RateLimiter(methodLimiter))
-	r.Use(middleaware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
-	r.Use(middleaware.Tracing())
-	// r.Use(middleaware.ContextTimeout(time.Second * 3))
-	r.Use(middleaware.Translation())
+	r.Use(middleware.RateLimiter(methodLimiter))
+	r.Use(middleware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
+	r.Use(middleware.Tracing())
+	// r.Use(middleware.ContextTimeout(time.Second * 3))
+	r.Use(middleware.Translation())
 	// swagger blog
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -69,7 +69,7 @@ func NewRouter() *gin.Engine {
 	})
 
 	apiv1 := r.Group("/api/v1")
-	apiv1.Use(middleaware.JWT())
+	apiv1.Use(middleware.JWT())
 	{
 		apiv1.GET("/tags", tag.List)
 		apiv1.POST("/tags", tag.Create)

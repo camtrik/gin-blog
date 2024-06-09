@@ -1,4 +1,4 @@
-package middleaware
+package middleware
 
 import (
 	"github.com/camtrik/gin-blog/global"
