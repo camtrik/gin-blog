@@ -23,10 +23,10 @@ A blog system based on [Gin](https://github.com/gin-gonic/gin).
 
 ## TODO List
 - [x] Upload image and files
-- [x] API Access Control: Implement authentication to secure the API endpoints.
+- [x] API Access Control by [JWT](https://github.com/dgrijalva/jwt-go)
 - [x] Integrate common middleware for enhanced logging and error handling.
 - [x] Ratelimiter ([url](https://github.com/juju/ratelimit)) & time out controller in middleware.
-- [x] Opentracing by jaeger (logger)
+- [x] Opentracing by [Jaeger](http://github.com/uber/jaeger-client-go)
 - [ ] Opentracing SQL?
 - [x] Graceful shutdown
 - [x] Hot reload configs
@@ -123,12 +123,14 @@ curl -X POST http://127.0.0.1:8000/upload/file -F file=@{file_path} -F type=1
 [Gin](https://github.com/gin-gonic/gin) に基づいたブログシステム。
 
 ## 完成済み機能
-- 記事の公開と修正
-- 記事タグ
+- 記事の管理
+- 記事タグの管理
 - 画像アップロード
-- API アクセス制御
-- Jaeger によるオープントレーシング
+- [JWT](https://github.com/dgrijalva/jwt-go)によるAPIアクセス制御
+- [Jaeger](https://github.com/uber/jaeger-client-go)によるオープントレーシング
 - API レートリミッター ([url](https://github.com/juju/ratelimit))
+- 正常なシャットダウン
+- ホットリロード
 
 ## TODO リスト
 - [x] Upload image and files
@@ -222,5 +224,3 @@ curl -X GET http://127.0.0.1:8000/api/v1/tags -H 'token: generated_token_here'
 ```bash 
 curl -X POST http://127.0.0.1:8000/upload/file -F file=@{file_path} -F type=1
 ```
-
-これで、README が英語と日本語の両方のバージョンで提供されます。
